@@ -9,10 +9,13 @@ interface EditorStore {
   isBottomPanelVisible: boolean;
   isDarkMode: boolean;
   currentFile: string | null;
+  openFiles: string[];
   fileContents: Record<string, string>;
   toggleBottomPanel: () => void;
   toggleDarkMode: () => void;
   setCurrentFile: (path: string | null) => void;
+  openFile: (path: string) => void;
+  closeFile: (path: string) => void;
   updateFileContent: (path: string, content: string) => void;
   saveFile: (path: string, content: string) => Promise<void>;
 }
@@ -21,6 +24,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   isBottomPanelVisible: false,
   isDarkMode: false,
   currentFile: null,
+  openFiles: [],
   fileContents: {},
   toggleBottomPanel: () => set((state) => ({ 
     isBottomPanelVisible: !state.isBottomPanelVisible 
@@ -43,6 +47,23 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     } else {
       set({ currentFile: null });
     }
+  },
+  openFile: async (path) => {
+    const { openFiles, setCurrentFile } = get();
+    if (!openFiles.includes(path)) {
+      set(state => ({ openFiles: [...state.openFiles, path] }));
+    }
+    setCurrentFile(path);
+  },
+  closeFile: (path) => {
+    set(state => {
+      const openFiles = state.openFiles.filter(p => p !== path);
+      const nextFile = openFiles[openFiles.length - 1] || null;
+      return {
+        openFiles,
+        currentFile: state.currentFile === path ? nextFile : state.currentFile
+      };
+    });
   },
   updateFileContent: (path, content) => {
     set((state) => ({
