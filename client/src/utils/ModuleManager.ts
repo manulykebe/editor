@@ -3,7 +3,7 @@ import { Logger, Group, sleep, Monitor, Sequence, Tree, Watch } from 'async-moni
 
 interface ModuleCache {
   [key: string]: any;
-}
+  }
 
 interface ExternalModules {
   'async-monitor.js': typeof import('async-monitor.js');
@@ -12,9 +12,7 @@ interface ExternalModules {
 
 export class ModuleManager {
   private static moduleCache: ModuleCache = {};
-  private static externalModules: ExternalModules = {
-    'async-monitor.js': { Logger, Group, sleep, Monitor, Sequence, Tree, Watch }
-  };
+  private static externalModules: ExternalModules = {};
   private static urlCache: Record<string, any> = {};
 
   static async loadExternalUrl(url: string): Promise<any> {
@@ -37,42 +35,38 @@ export class ModuleManager {
   static async executeCode(code: string, filename: string = 'anonymous'): Promise<any> {
     // Create module context
     const module = { exports: {} };
+    
+    // Create require functions
     const require = this.createRequire(filename);
+    require.async = this.createAsyncRequire(filename);
 
     // Transform imports to requires
     code = this.transformImports(code);
 
-    // Create browser-safe execution context
-    const context = {
-      module,
-      exports: module.exports,
-      require,
-      console,
-      setTimeout,
-      clearTimeout,
-      setInterval,
-      clearInterval,
-      __filename: filename,
-      __dirname: filename.split('/').slice(0, -1).join('/'),
-      global: window, // Use window as global
-      window,
-      document,
-      navigator,
-      location
-    };
-
-    // Execute in sandbox
+    // Use AsyncFunction constructor
+    const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+    const wrappedCode = `
+      try {
+        ${code}
+        return module.exports;
+      } catch (error) {
+        console.error('Module execution error:', error);
+        throw error;
+      }
+    `;
+    
     try {
-      const fn = new Function(...Object.keys(context), code);
-      await fn.apply(null, Object.values(context));
-      return module.exports;
+      // Create and execute async function
+      const fn = new AsyncFunction('module', 'exports', 'require', wrappedCode);
+      const result = await fn(module, module.exports, require);
+      return result;
     } catch (error) {
       console.error(`Error executing code in ${filename}:`, error);
-      throw error;
+      throw error; 
     }
   }
 
-  private static createRequire(filename: string) {
+  private static createRequire(filename: string): any {
     return (path: string) => {
       // Check module cache
       if (this.moduleCache[path]) {
@@ -80,6 +74,36 @@ export class ModuleManager {
       }
 
       // Check external modules
+      if (this.externalModules[path]) {
+        return this.externalModules[path];
+      }
+
+      // Resolve relative paths
+      const resolvedPath = this.resolvePath(path, filename);
+      
+      // Load module
+      try {
+        // For demo, assume all external modules are URLs
+        if (path.startsWith('http')) {
+          return this.loadExternalUrl(path);
+        }
+        
+        // Otherwise treat as built-in/cached module
+        throw new Error(`Module not found: ${path}`);
+      } catch (error) {
+        console.error(`Failed to require ${path}:`, error);
+        throw error;
+      }
+    };
+  }
+  private static async createAsyncRequire(filename: string): Promise<any> {
+    return async (path: string) => {
+      // Check module cache
+      if (this.moduleCache[path]) {
+        return this.moduleCache[path];
+      }
+
+      // Check external modules  
       if (this.externalModules[path]) {
         return this.externalModules[path];
       }
