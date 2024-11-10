@@ -129,7 +129,7 @@ const demo01 = new Group({repeat: 3});
 
 	function demo_demo01() {
 		logger.clear();
-		logger.log(demo01.loggerTree, ['tree', `tree-${demo01._id}`]);
+		console.log(demo01.loggerTree, ['tree', `tree-${demo01._id}`]);
 
 		demo01.reset();
 		demo01
