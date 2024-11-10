@@ -128,6 +128,22 @@ app.delete('/api/files', async (req, res) => {
   }
 });
 
+// Rename file or folder
+app.patch('/api/files', async (req, res) => {
+  try {
+    const { oldPath, newPath } = req.body;
+    if (!oldPath || !newPath) throw new Error('Old and new paths are required');
+    
+    const oldFullPath = path.join(WORKSPACE_DIR, oldPath);
+    const newFullPath = path.join(WORKSPACE_DIR, newPath);
+    
+    await fs.rename(oldFullPath, newFullPath);
+    res.json({ message: 'File renamed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

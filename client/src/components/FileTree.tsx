@@ -9,6 +9,7 @@ import {
 	Plus,
 	X,
 	Trash,
+	Edit2,
 } from "lucide-react";
 import { useEditorStore } from "../store/editorStore";
 
@@ -23,13 +24,12 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 	item,
 	onRefresh,
 }) => {
-	const [isExpanded, setIsExpanded] = React.useState(true);
-	const [isCreating, setIsCreating] = React.useState(false);
-	const [newItemName, setNewItemName] = React.useState("");
-	const [newItemType, setNewItemType] = React.useState<"file" | "folder">(
-		"file"
-	);
-	const { currentFile, openFile } = useEditorStore(); // Update this line
+	const [isExpanded, setIsExpanded] = useState(true);
+	const [isCreating, setIsCreating] = useState(false);
+	const [isRenaming, setIsRenaming] = useState(false);
+	const [newItemName, setNewItemName] = useState("");
+	const [newItemType, setNewItemType] = useState<"file" | "folder">("file");
+	const { currentFile, openFile } = useEditorStore();
 
 	const handleClick = () => {
 		if (item.type === "file") {
@@ -70,6 +70,31 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 		}
 	};
 
+	const handleRename = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!newItemName) return;
+
+		try {
+			const oldPath = item.path.slice(1);
+			const parentPath = oldPath.substring(0, oldPath.lastIndexOf('/'));
+			const newPath = `${parentPath}/${newItemName}${item.type === 'file' ? '.js' : ''}`;
+
+			await fetch("http://localhost:3000/api/files", {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					oldPath,
+					newPath,
+				}),
+			});
+			setIsRenaming(false);
+			setNewItemName("");
+			onRefresh();
+		} catch (error) {
+			console.error("Error renaming item:", error);
+		}
+	};
+
 	const handleDelete = async () => {
 		if (!confirm(`Delete ${item.name}?`)) return;
 
@@ -88,70 +113,90 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 		}
 	};
 
+	const actionButtons = (
+		<div className="hidden group-hover:flex items-center px-2">
+			<button
+				className="p-1 hover:bg-gray-600 rounded"
+				onClick={() => {
+					setIsRenaming(true);
+					setNewItemName(item.name.replace(/\.js$/, ''));
+				}}
+				title="Rename"
+			>
+				<Edit2 size={14} />
+			</button>
+			{item.type === "folder" && (
+				<>
+					<button
+						className="p-1 hover:bg-gray-600 rounded"
+						onClick={() => handleCreate("file")}
+						title="New File"
+					>
+						<File size={14} />
+					</button>
+					<button
+						className="p-1 hover:bg-gray-600 rounded"
+						onClick={() => handleCreate("folder")}
+						title="New Folder"
+					>
+						<FolderPlus size={14} />
+					</button>
+				</>
+			)}
+			<button
+				className="p-1 hover:bg-gray-600 rounded"
+				onClick={handleDelete}
+				title="Delete"
+			>
+				<Trash size={14} />
+			</button>
+		</div>
+	);
+
 	return (
 		<div>
 			<div className="group flex items-center hover:bg-gray-700 text-sm">
-				<div
-					className={`flex-1 flex items-center py-1 px-4 cursor-pointer ${
-						item.path === currentFile ? "bg-gray-700" : ""
-					}`}
-					onClick={handleClick}
-				>
-					{item.type === "folder" ? (
-						<>
-							{isExpanded ? (
-								<ChevronDown size={16} className="mr-1" />
+				{!isRenaming ? (
+					<>
+						<div
+							className={`flex-1 flex items-center py-1 px-4 cursor-pointer ${
+								item.path === currentFile ? "bg-gray-700" : ""
+							}`}
+							onClick={handleClick}
+						>
+							{item.type === "folder" ? (
+								<>
+									{isExpanded ? (
+										<ChevronDown size={16} className="mr-1" />
+									) : (
+										<ChevronRight size={16} className="mr-1" />
+									)}
+									<Folder size={16} className="mr-2 text-blue-400" />
+								</>
 							) : (
-								<ChevronRight size={16} className="mr-1" />
+								<>
+									<span className="w-4 mr-1" />
+									<FileText
+										size={16}
+										className="mr-2 text-gray-400"
+									/>
+								</>
 							)}
-							<Folder size={16} className="mr-2 text-blue-400" />
-						</>
-					) : (
-						<>
-							<span className="w-4 mr-1" />
-							<FileText
-								size={16}
-								className="mr-2 text-gray-400"
-							/>
-						</>
-					)}
-					{item.name}
-				</div>
-				{item.type === "folder" && (
-					<div className="hidden group-hover:flex items-center px-2">
-						<button
-							className="p-1 hover:bg-gray-600 rounded"
-							onClick={() => handleCreate("file")}
-							title="New File"
-						>
-							<File size={14} />
-						</button>
-						<button
-							className="p-1 hover:bg-gray-600 rounded"
-							onClick={() => handleCreate("folder")}
-							title="New Folder"
-						>
-							<FolderPlus size={14} />
-						</button>
-						<button
-							className="p-1 hover:bg-gray-600 rounded"
-							onClick={handleDelete}
-							title="Delete"
-						>
-							<Trash size={14} />
-						</button>
-					</div>
-				)}
-				{item.type === "file" && (
-					<div className="hidden group-hover:flex items-center px-2">
-						<button
-							className="p-1 hover:bg-gray-600 rounded"
-							onClick={handleDelete}
-							title="Delete"
-						>
-							<Trash size={14} />
-						</button>
-					</div>
+							{item.name}
+						</div>
+						{actionButtons}
+					</>
+				) : (
+					<form onSubmit={handleRename} className="flex-1 flex items-center px-4">
+						<input
+							type="text"
+							value={newItemName}
+							onChange={(e) => setNewItemName(e.target.value)}
+							className="bg-gray-800 text-white px-2 py-1 text-sm rounded flex-1"
+							autoFocus
+							onBlur={() => setIsRenaming(false)}
+						/>
+					</form>
 				)}
 			</div>
 
