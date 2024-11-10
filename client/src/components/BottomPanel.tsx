@@ -10,6 +10,7 @@ const tabs = [
 
 export const BottomPanel = () => {
   const [activeTab, setActiveTab] = React.useState('terminal');
+  const [executionResult, setExecutionResult] = React.useState(null);
 
   return (
     <div className="h-full flex flex-col bg-zinc-900">
@@ -35,9 +36,24 @@ export const BottomPanel = () => {
       <div className="flex-1 p-2 text-sm font-mono">
         {activeTab === 'terminal' && (
           <div className="text-zinc-300">
-            <div>$ npm run dev</div>
-            <div className="text-green-400">VITE v5.4.2 ready in 150 ms</div>
-            <div className="text-zinc-400">➜ Local: http://localhost:5173/</div>
+            {executionResult ? (
+              <>
+                {executionResult.output.map((line, i) => (
+                  <div key={i} className={`
+                    ${line.startsWith('[ERROR]') ? 'text-red-400' : 'text-zinc-300'}
+                  `}>
+                    {line}
+                  </div>
+                ))}
+                {executionResult.error && (
+                  <div className="text-red-400 mt-2">
+                    {executionResult.error}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div>Ready</div>
+            )}
           </div>
         )}
       </div>
