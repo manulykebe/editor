@@ -15,22 +15,21 @@ import { useEditorStore } from './store/editorStore';
 
 function App() {
   const { isBottomPanelVisible } = useEditorStore();
-
   return (
     <div className="h-screen bg-gray-900 text-white flex flex-col">
       <MenuBar />
       <div className="flex-1 overflow-hidden flex">
         <ActivityBar />
         <PanelGroup direction="horizontal" className="flex-1">
-          <Panel defaultSize={20} minSize={15} maxSize={30}>
+          <Panel id="side-panel" order={1} defaultSize={20} minSize={15} maxSize={30}>
             <SidePanel />
           </Panel>
           
           <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-blue-500 transition-colors" />
           
-          <Panel>
+          <Panel id="main-panel" order={2}>
             <PanelGroup direction="vertical" className="h-full">
-              <Panel>
+              <Panel id="editor-panel" order={1}>
                 <div className="h-full flex flex-col">
                   <TabBar />
                   <div className="flex-1 overflow-hidden">
@@ -38,11 +37,10 @@ function App() {
                   </div>
                 </div>
               </Panel>
-
               {isBottomPanelVisible && (
                 <>
                   <PanelResizeHandle className="h-1 bg-gray-700 hover:bg-blue-500 transition-colors" />
-                  <Panel defaultSize={30} minSize={20}>
+                  <Panel id="bottom-panel" order={2} defaultSize={30} minSize={20}>
                     <BottomPanel />
                   </Panel>
                 </>
