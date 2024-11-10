@@ -9,7 +9,7 @@ interface EditorStore {
 
 export const useEditorStore = create<EditorStore>((set) => ({
   isBottomPanelVisible: false,
-  isDarkMode: true,
+  isDarkMode: false,
   toggleBottomPanel: () => set((state) => ({ 
     isBottomPanelVisible: !state.isBottomPanelVisible 
   })),
