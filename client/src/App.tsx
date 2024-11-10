@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Panel,
   PanelGroup,
@@ -12,9 +12,25 @@ import { TabBar } from './components/TabBar';
 import { Footer } from './components/Footer';
 import { BottomPanel } from './components/BottomPanel';
 import { useEditorStore } from './store/editorStore';
+import { LoadingScreen } from './components/LoadingScreen';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const { isBottomPanelVisible } = useEditorStore();
+
+  useEffect(() => {
+    // Simulate loading time or wait for actual resources
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="h-screen bg-zinc-900 text-white flex flex-col">
       <MenuBar />
