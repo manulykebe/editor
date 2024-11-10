@@ -1,4 +1,3 @@
-import React from 'react';
 import { Terminal, GitBranch, Bell, Check } from 'lucide-react';
 import { useEditorStore } from '../store/editorStore';
 
