@@ -7,9 +7,9 @@ export const TabBar = () => {
 		useEditorStore();
 
 	const hasDuplicateFilename = (path: string) => {
-		const fileName = path.split("\\").pop();
+		const fileName = path.split("/").pop();
 		return (
-			openFiles.filter((p) => p.split("\\").pop() === fileName).length > 1
+			openFiles.filter((p) => p.split("/").pop() === fileName).length > 1
 		);
 	};
 
@@ -17,7 +17,7 @@ export const TabBar = () => {
 		<div className="bg-zinc-900 border-b border-zinc-700 flex items-center justify-between">
 			<div className="flex flex-1">
 				{openFiles.map((path) => {
-					const fileName = path.split("\\").pop();
+					const fileName = path.split("/").pop();
 					const showFullPath = hasDuplicateFilename(path);
 
 					return (
@@ -37,7 +37,7 @@ export const TabBar = () => {
 								</span>
 								{showFullPath && (
 									<span className="text-xs text-zinc-500 mt-0">
-										{path.split("/").join("\\")}
+										{path.split("/").join("/")}
 									</span>
 								)}
 							</div>

@@ -105,8 +105,6 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 		}
 	},
 	executeFile: async (path) => {
-		debugger;
-
 		const content = get().fileContents[path];
 		if (!content) return;
 
