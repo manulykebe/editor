@@ -1,5 +1,8 @@
 import { create } from "zustand";
-import { ExecutionService, ExecutionResult } from "../services/ExecutionService";
+import {
+	ExecutionService,
+	ExecutionResult,
+} from "../services/ExecutionService";
 import { useState, useCallback } from "react";
 import { ModuleManager } from "../utils/ModuleManager";
 
@@ -102,26 +105,31 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 		}
 	},
 	executeFile: async (path) => {
+		debugger;
+
 		const content = get().fileContents[path];
 		if (!content) return;
 
 		set({ isExecuting: true, executionResult: null });
-		
+
 		try {
 			const result = await ExecutionService.executeScript(content, path);
-			set({ 
+			set({
 				executionResult: result,
-				isExecuting: false 
+				isExecuting: false,
 			});
 		} catch (error) {
-			set({ 
+			set({
 				executionResult: {
 					success: false,
 					output: [],
-					error: error instanceof Error ? error.message : 'Unknown error'
+					error:
+						error instanceof Error
+							? error.message
+							: "Unknown error",
 				},
-				isExecuting: false 
+				isExecuting: false,
 			});
 		}
-	}
+	},
 }));

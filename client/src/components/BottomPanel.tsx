@@ -1,5 +1,6 @@
 import React from 'react';
-import { Terminal, Bug, AlertCircle } from 'lucide-react';
+import { Terminal, Bug, AlertCircle, X } from 'lucide-react';
+import { useEditorStore } from '../store/editorStore';
 
 const tabs = [
   { id: 'problems', icon: AlertCircle, label: 'Problems' },
@@ -9,8 +10,8 @@ const tabs = [
 ];
 
 export const BottomPanel = () => {
-  const [activeTab, setActiveTab] = React.useState('terminal');
-  const [executionResult, setExecutionResult] = React.useState(null);
+  const [activeTab, setActiveTab] = React.useState('output');
+  const { executionResult, isExecuting } = useEditorStore();
 
   return (
     <div className="h-full flex flex-col bg-zinc-900">
@@ -21,8 +22,8 @@ export const BottomPanel = () => {
             <button
               key={tab.id}
               className={`
-                px-3 py-1 flex items-center gap-1 text-sm
-                ${activeTab === tab.id ? 'border-b-2 border-blue-500' : ''}
+                px-3 py-1 flex items-center gap-1 text-sm text-zinc-400
+                ${activeTab === tab.id ? 'border-b-2 border-blue-500 text-zinc-200' : ''}
                 hover:bg-gray-800 dark:hover:bg-gray-900
               `}
               onClick={() => setActiveTab(tab.id)}
@@ -33,26 +34,29 @@ export const BottomPanel = () => {
           );
         })}
       </div>
-      <div className="flex-1 p-2 text-sm font-mono">
-        {activeTab === 'terminal' && (
+      <div className="flex-1 p-2 font-mono overflow-y-auto bg-zinc-900">
+        {activeTab === 'output' && (
           <div className="text-zinc-300">
-            {executionResult ? (
+            {isExecuting ? (
+              <div className="text-blue-400 animate-pulse">Executing...</div>
+            ) : executionResult ? (
               <>
                 {executionResult.output.map((line, i) => (
                   <div key={i} className={`
-                    ${line.startsWith('[ERROR]') ? 'text-red-400' : 'text-zinc-300'}
+                    ${line.startsWith('[ERROR]') ? 'text-red-400' : 'text-green-400'}
+                    whitespace-pre-wrap font-mono text-sm
                   `}>
                     {line}
                   </div>
                 ))}
                 {executionResult.error && (
-                  <div className="text-red-400 mt-2">
-                    {executionResult.error}
+                  <div className="text-red-400 mt-2 whitespace-pre-wrap font-mono text-sm">
+                    Error: {executionResult.error}
                   </div>
                 )}
               </>
             ) : (
-              <div>Ready</div>
+              <div className="text-zinc-500">Ready to execute code...</div>
             )}
           </div>
         )}

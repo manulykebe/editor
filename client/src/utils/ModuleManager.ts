@@ -42,7 +42,7 @@ export class ModuleManager {
     // Transform imports to requires
     code = this.transformImports(code);
 
-    // Create execution context
+    // Create browser-safe execution context
     const context = {
       module,
       exports: module.exports,
@@ -52,10 +52,13 @@ export class ModuleManager {
       clearTimeout,
       setInterval,
       clearInterval,
-      process,
-      Buffer,
       __filename: filename,
-      __dirname: filename.split('/').slice(0, -1).join('/')
+      __dirname: filename.split('/').slice(0, -1).join('/'),
+      global: window, // Use window as global
+      window,
+      document,
+      navigator,
+      location
     };
 
     // Execute in sandbox
