@@ -35,9 +35,13 @@ function App() {
 					<Panel
 						id="side-panel"
 						order={1}
-						defaultSize={20}
+						defaultSize={50}
 						minSize={15}
-						maxSize={30}
+						maxSize={100}
+						// style={{
+						// 	minWidth: "150px", // set minimum width in pixels
+						// 	maxWidth: "450px", // set maximum width in pixels
+						// }}
 					>
 						<SidePanel />
 					</Panel>

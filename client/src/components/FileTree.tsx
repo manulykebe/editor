@@ -165,34 +165,32 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 							onClick={handleClick}
 						>
 							{item.type === "folder" ? (
-								<>
+								<span className="flex items-center w-4 mr-0">
 									{isExpanded ? (
-										<ChevronDown size={16} className="mr-1" />
+										<ChevronDown size={16} className="mr-0.5" />
 									) : (
-										<ChevronRight size={16} className="mr-1" />
+										<ChevronRight size={16} className="mr-0.5" />
 									)}
-									<Folder size={16} className="mr-2 text-blue-400" />
-								</>
+								</span>
 							) : (
-								<>
-									<span className="w-4 mr-1" />
+								<span className="flex items-center w-4 mr-1">
 									<FileText
 										size={16}
-										className="mr-2 text-gray-400"
+										className="text-gray-400"
 									/>
-								</>
+								</span>
 							)}
 							{item.name}
 						</div>
 						{actionButtons}
 					</>
 				) : (
-					<form onSubmit={handleRename} className="flex-1 flex items-center px-4">
+					<form onSubmit={handleRename} className="flex-1 flex items-center px-8 border-0">
 						<input
 							type="text"
 							value={newItemName}
 							onChange={(e) => setNewItemName(e.target.value)}
-							className="bg-gray-800 text-white px-2 py-1 text-sm rounded flex-1"
+							className="bg-gray-700 text-white px-1 py-1 text-sm flex-1 border-0"
 							autoFocus
 							onBlur={() => setIsRenaming(false)}
 						/>
@@ -203,14 +201,14 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 			{isCreating && (
 				<form
 					onSubmit={handleSubmit}
-					className="ml-8 my-1 flex items-center"
+					className="ml-8 my-1 flex items-center bg-gray-800"
 				>
 					<input
 						type="text"
 						value={newItemName}
 						onChange={(e) => setNewItemName(e.target.value)}
 						placeholder={`New ${newItemType}...`}
-						className="bg-gray-800 text-white px-2 py-1 text-sm rounded"
+						className=" text-white px-2 py-1 text-sm rounded"
 						autoFocus
 					/>
 					<button
