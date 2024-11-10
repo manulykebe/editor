@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Panel,
   PanelGroup,
@@ -16,7 +15,7 @@ import { useEditorStore } from './store/editorStore';
 function App() {
   const { isBottomPanelVisible } = useEditorStore();
   return (
-    <div className="h-screen bg-gray-900 text-white flex flex-col">
+    <div className="h-screen bg-zinc-900 text-white flex flex-col">
       <MenuBar />
       <div className="flex-1 overflow-hidden flex">
         <ActivityBar />
@@ -25,7 +24,7 @@ function App() {
             <SidePanel />
           </Panel>
           
-          <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-blue-500 transition-colors" />
+          <PanelResizeHandle className="w-1 bg-zinc-700 hover:bg-blue-500 transition-colors" />
           
           <Panel id="main-panel" order={2}>
             <PanelGroup direction="vertical" className="h-full">
@@ -39,7 +38,7 @@ function App() {
               </Panel>
               {isBottomPanelVisible && (
                 <>
-                  <PanelResizeHandle className="h-1 bg-gray-700 hover:bg-blue-500 transition-colors" />
+                  <PanelResizeHandle className="h-1 bg-zinc-700 hover:bg-blue-500 transition-colors" />
                   <Panel id="bottom-panel" order={2} defaultSize={30} minSize={20}>
                     <BottomPanel />
                   </Panel>

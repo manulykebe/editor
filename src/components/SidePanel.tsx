@@ -14,7 +14,7 @@ const Panel = ({ title, children, defaultExpanded = false }: PanelProps) => {
 	return (
 		<div className="border-b border-gray-700">
 			<div
-				className="flex items-center px-0 py-1 hover:bg-gray-700 cursor-pointer"
+				className="flex items-center px-0 py-1 hover:bg-gray-700 dark:hover:bg-gray-800 cursor-pointer"
 				onClick={() => setIsExpanded(!isExpanded)}
 			>
 				{isExpanded ? (
@@ -24,10 +24,10 @@ const Panel = ({ title, children, defaultExpanded = false }: PanelProps) => {
 				)}
 				<span className="text-sm font-medium flex-1">{title}</span>
 				<div className="flex items-center gap-1">
-					<button className="p-1 hover:bg-gray-600 rounded">
+					<button className="p-1 hover:bg-gray-600 dark:hover:bg-gray-700 rounded">
 						<Plus size={14} />
 					</button>
-					<button className="p-1 hover:bg-gray-600 rounded">
+					<button className="p-1 hover:bg-gray-600 dark:hover:bg-gray-700 rounded">
 						<MoreHorizontal size={14} />
 					</button>
 				</div>
@@ -39,7 +39,7 @@ const Panel = ({ title, children, defaultExpanded = false }: PanelProps) => {
 
 export const SidePanel = () => {
 	return (
-		<div className="h-full bg-gray-800 overflow-y-auto">
+		<div className="h-full bg-gray-800 dark:bg-zinc-900 overflow-y-auto">
 			<Panel title="editor" defaultExpanded>
 				<FileTree />
 			</Panel>

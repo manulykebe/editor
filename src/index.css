@@ -2,20 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom scrollbar styles */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #1f2937;
+  @apply bg-zinc-800 dark:bg-zinc-900;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #4b5563;
-  border-radius: 5px;
+  @apply bg-zinc-600 dark:bg-zinc-700 rounded;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-zinc-500 dark:bg-zinc-600;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+/* Dark mode styles */
+.dark {
+  @apply bg-zinc-950 text-zinc-50;
+  --tw-text-opacity: 1;
+  color: rgba(249, 250, 251, var(--tw-text-opacity));
+}
+
+/* Add transition for dark mode */
+html {
+  @apply transition-colors duration-200;
 }

@@ -1,11 +1,24 @@
-import { Terminal, GitBranch, Bell, Check } from "lucide-react";
+import { Terminal, GitBranch, Bell, Check, Sun, Moon } from "lucide-react";
 import { useEditorStore } from "../store/editorStore";
+import { useEffect } from "react";
 
 export const Footer = () => {
-	const { toggleBottomPanel } = useEditorStore();
+	const {
+		isBottomPanelVisible,
+		isDarkMode,
+		toggleBottomPanel,
+		toggleDarkMode,
+	} = useEditorStore();
 
+	useEffect(() => {
+		if (isDarkMode) {
+			document.documentElement.classList.add("dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+		}
+	}, [isDarkMode]);
 	return (
-		<div className="h-6 bg-blue-600 text-white flex items-center justify-between px-2 text-xs">
+		<div className="h-6 bg-blue-600 dark:bg-zinc-800 text-white flex items-center justify-between px-2 text-xs">
 			<div className="flex items-center gap-4">
 				<div className="flex items-center gap-1">
 					<GitBranch size={14} />
@@ -23,13 +36,25 @@ export const Footer = () => {
 					<Bell size={14} />
 					<span>0</span>
 				</div>
-				<button
-					className="flex items-center gap-1 hover:bg-blue-700 px-2 py-0.5 rounded"
-					onClick={toggleBottomPanel}
-				>
-					<Terminal size={14} />
-					<span>Terminal</span>
-				</button>
+				<div className="flex items-center gap-1">
+					<button
+						className={`flex items-center gap-1 px-2 py-0.5 rounded ${
+							isBottomPanelVisible
+								? "bg-blue-700 dark:bg-zinc-700"
+								: "hover:bg-blue-700 dark:hover:bg-gray-700"
+						}`}
+						onClick={toggleBottomPanel}
+					>
+						<Terminal size={14} />
+						<span>Terminal</span>
+					</button>
+					<button
+						className="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-blue-700 dark:hover:bg-gray-700"
+						onClick={toggleDarkMode}
+					>
+						{isDarkMode ? <Sun size={14} /> : <Moon size={14} />}
+					</button>
+				</div>
 			</div>
 		</div>
 	);
