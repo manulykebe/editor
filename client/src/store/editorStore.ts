@@ -1,19 +1,63 @@
 import { create } from 'zustand';
 
+interface FileData {
+  path: string;
+  content: string;
+}
+
 interface EditorStore {
   isBottomPanelVisible: boolean;
   isDarkMode: boolean;
+  currentFile: string | null;
+  fileContents: Record<string, string>;
   toggleBottomPanel: () => void;
   toggleDarkMode: () => void;
+  setCurrentFile: (path: string | null) => void;
+  updateFileContent: (path: string, content: string) => void;
+  saveFile: (path: string, content: string) => Promise<void>;
 }
 
-export const useEditorStore = create<EditorStore>((set) => ({
+export const useEditorStore = create<EditorStore>((set, get) => ({
   isBottomPanelVisible: false,
   isDarkMode: false,
+  currentFile: null,
+  fileContents: {},
   toggleBottomPanel: () => set((state) => ({ 
     isBottomPanelVisible: !state.isBottomPanelVisible 
   })),
   toggleDarkMode: () => set((state) => ({
     isDarkMode: !state.isDarkMode
   })),
+  setCurrentFile: async (path) => {
+    if (path) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/files?path=${encodeURIComponent(path.slice(1))}`);
+        const data = await response.json();
+        set((state) => ({
+          currentFile: path,
+          fileContents: { ...state.fileContents, [path]: data.content }
+        }));
+      } catch (error) {
+        console.error('Error loading file:', error);
+      }
+    } else {
+      set({ currentFile: null });
+    }
+  },
+  updateFileContent: (path, content) => {
+    set((state) => ({
+      fileContents: { ...state.fileContents, [path]: content }
+    }));
+  },
+  saveFile: async (path, content) => {
+    try {
+      await fetch('http://localhost:3000/api/files', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: path.slice(1), content })
+      });
+    } catch (error) {
+      console.error('Error saving file:', error);
+    }
+  }
 }));
