@@ -6,12 +6,14 @@ import path from 'path';
 const app = express();
 const port = process.env.PORT || 3000;
 const WORKSPACE_DIR = './workspace';
+const WORKFLOWS_DIR = './workflows';
 
 app.use(cors());
 app.use(express.json());
 
-// Ensure workspace directory exists
+// Ensure directories exist
 await fs.mkdir(WORKSPACE_DIR, { recursive: true });
+await fs.mkdir(WORKFLOWS_DIR, { recursive: true });
 await fs.mkdir(path.join(WORKSPACE_DIR, 'demo'), { recursive: true });
 
 // Create initial demo files if they don't exist
@@ -29,6 +31,7 @@ for (const [filename, content] of Object.entries(defaultFiles)) {
   }
 }
 
+// File tree endpoints
 async function buildFileTree(dir) {
   const items = await fs.readdir(dir, { withFileTypes: true });
   const result = [];
@@ -56,7 +59,6 @@ async function buildFileTree(dir) {
   return result;
 }
 
-// Get file tree
 app.get('/api/files/tree', async (req, res) => {
   try {
     const tree = await buildFileTree(WORKSPACE_DIR);
@@ -66,7 +68,48 @@ app.get('/api/files/tree', async (req, res) => {
   }
 });
 
-// Read file content
+// Workflow endpoints
+app.get('/api/workflows', async (req, res) => {
+  try {
+    const files = await fs.readdir(WORKFLOWS_DIR);
+    const workflows = await Promise.all(
+      files.map(async (file) => {
+        const content = await fs.readFile(
+          path.join(WORKFLOWS_DIR, file),
+          'utf-8'
+        );
+        return JSON.parse(content);
+      })
+    );
+    res.json(workflows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/workflows', async (req, res) => {
+  try {
+    const workflow = req.body;
+    await fs.writeFile(
+      path.join(WORKFLOWS_DIR, `${workflow.id}.json`),
+      JSON.stringify(workflow, null, 2)
+    );
+    res.json({ message: 'Workflow saved successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/workflows/:id', async (req, res) => {
+  try {
+    await fs.unlink(path.join(WORKFLOWS_DIR, `${req.params.id}.json`));
+    res.json({ message: 'Workflow deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Existing file endpoints...
 app.get('/api/files', async (req, res) => {
   try {
     const { path: filePath } = req.query;
@@ -80,7 +123,6 @@ app.get('/api/files', async (req, res) => {
   }
 });
 
-// Create file or folder
 app.post('/api/files', async (req, res) => {
   try {
     const { path: itemPath, type, content = '' } = req.body;
@@ -100,7 +142,6 @@ app.post('/api/files', async (req, res) => {
   }
 });
 
-// Update file
 app.put('/api/files', async (req, res) => {
   try {
     const { path: filePath, content } = req.body;
@@ -114,7 +155,6 @@ app.put('/api/files', async (req, res) => {
   }
 });
 
-// Delete file or folder
 app.delete('/api/files', async (req, res) => {
   try {
     const { path: itemPath } = req.query;
@@ -128,7 +168,6 @@ app.delete('/api/files', async (req, res) => {
   }
 });
 
-// Rename file or folder
 app.patch('/api/files', async (req, res) => {
   try {
     const { oldPath, newPath } = req.body;

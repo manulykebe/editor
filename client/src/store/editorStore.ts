@@ -5,6 +5,7 @@ import {
 } from "../services/ExecutionService";
 import { useState, useCallback } from "react";
 import { ModuleManager } from "../utils/ModuleManager";
+import { useWorkflowStore } from "./workflowStore";
 
 const DEFAULT_CODE = `console.log('Hello, world!');`;
 
@@ -66,6 +67,9 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 			} catch (error) {
 				console.error("Error loading file:", error);
 			}
+			// Reset currentWorkflow
+			debugger;
+			// useWorkflowStore.getState().setCurrentWorkflow(null);
 		} else {
 			set({ currentFile: null });
 		}

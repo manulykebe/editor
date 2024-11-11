@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChevronDown, ChevronRight, Plus, MoreHorizontal } from "lucide-react";
 import { FileTree } from "./FileTree";
+import { WorkflowTree } from "./workflow/WorkflowTree";
+import { useWorkflowStore } from "../store/workflowStore";
 
 interface PanelProps {
 	title: string;
@@ -38,15 +40,17 @@ const Panel = ({ title, children, defaultExpanded = false }: PanelProps) => {
 };
 
 export const SidePanel = () => {
+  const { loadWorkflows } = useWorkflowStore();
+  useEffect(() => {
+    loadWorkflows();
+  }, [loadWorkflows]);
 	return (
 		<div className="h-full bg-gray-800 dark:bg-zinc-900 overflow-y-auto">
 			<Panel title="editor" defaultExpanded>
 				<FileTree />
 			</Panel>
-			<Panel title="project" defaultExpanded>
-				<div className="px-4 py-2 text-sm text-gray-400">
-					No outline information available
-				</div>
+      <Panel title="workflows" defaultExpanded>
+        <WorkflowTree />
 			</Panel>
 			<Panel title="outline">
 				<div className="px-4 py-2 text-sm text-gray-400">

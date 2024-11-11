@@ -1,17 +1,21 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { MenuBar } from "./components/MenuBar";
 import { ActivityBar } from "./components/ActivityBar";
-import { SidePanel } from "./components/SidePanel";
-import { Editor } from "./components/Editor";
-import { TabBar } from "./components/TabBar";
-import { Footer } from "./components/Footer";
 import { BottomPanel } from "./components/BottomPanel";
-import { useEditorStore } from "./store/editorStore";
+import { Editor } from "./components/Editor";
+import { Footer } from "./components/Footer";
 import { LoadingScreen } from "./components/LoadingScreen";
+import { MenuBar } from "./components/MenuBar";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { SidePanel } from "./components/SidePanel";
+import { TabBar } from "./components/TabBar";
+import { useEditorStore } from "./store/editorStore";
+import { useWorkflowStore } from "./store/workflowStore";
+import { WorkflowEditor } from "./components/workflow/WorkflowEditor";
 
-function App() {
+const App = () => {
 	const [isLoading, setIsLoading] = useState(true);
+	const { currentFile } = useEditorStore();
+	const { currentWorkflow } = useWorkflowStore();
 	const { isBottomPanelVisible } = useEditorStore();
 
 	useEffect(() => {
@@ -54,7 +58,8 @@ function App() {
 								<div className="h-full flex flex-col">
 									<TabBar />
 									<div className="flex-1 overflow-hidden">
-										<Editor />
+										{currentFile && <Editor />}
+										{currentWorkflow && <WorkflowEditor />}
 									</div>
 								</div>
 							</Panel>
