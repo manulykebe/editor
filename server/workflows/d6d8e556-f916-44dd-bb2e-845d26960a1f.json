@@ -7,8 +7,8 @@
       "id": "8045fa2c-6191-48c5-8218-93cc2a4b4977",
       "type": "workflowNode",
       "position": {
-        "x": 52.07446808510639,
-        "y": -61.43617021276597
+        "x": 13.503698680878415,
+        "y": -74.0714222589786
       },
       "data": {
         "name": "ssssss",
@@ -30,8 +30,8 @@
       "height": 100,
       "selected": false,
       "positionAbsolute": {
-        "x": 52.07446808510639,
-        "y": -61.43617021276597
+        "x": 13.503698680878415,
+        "y": -74.0714222589786
       },
       "dragging": false
     },
@@ -67,14 +67,5 @@
       "dragging": false
     }
   ],
-  "edges": [
-    {
-      "source": "5db32b0e-0a36-46c3-8178-f8afcaefd4c0",
-      "sourceHandle": null,
-      "target": "8045fa2c-6191-48c5-8218-93cc2a4b4977",
-      "targetHandle": null,
-      "type": "default",
-      "id": "reactflow__edge-5db32b0e-0a36-46c3-8178-f8afcaefd4c0-8045fa2c-6191-48c5-8218-93cc2a4b4977"
-    }
-  ]
+  "edges": []
 }
