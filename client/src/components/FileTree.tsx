@@ -31,7 +31,7 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 	const [newItemType, setNewItemType] = useState<"file" | "folder">("file");
 	const { currentFile, openFile } = useEditorStore();
 
-	const handleClick = () => {
+	const  handleClick = () => {
 		if (item.type === "file") {
 			openFile(item.path);
 		} else {

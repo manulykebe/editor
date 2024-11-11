@@ -48,27 +48,29 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 		set((state) => ({
 			isDarkMode: !state.isDarkMode,
 		})),
-	setCurrentFile: async (path) => {
+	setCurrentFile: (path: string | null) => {
 		if (path) {
 			try {
-				const response = await fetch(
+				fetch(
 					`http://localhost:3000/api/files?path=${encodeURIComponent(
 						path.slice(1)
 					)}`
-				);
-				const data = await response.json();
-				set((state) => ({
-					currentFile: path,
-					fileContents: {
-						...state.fileContents,
-						[path]: data.content,
-					},
-				}));
+				)
+					.then((res) => res.json())
+					.then((data) => {
+						set((state) => ({
+							currentFile: path,
+							fileContents: {
+								...state.fileContents,
+								[path]: data.content,
+							},
+						}));
+						// Reset currentWorkflow when switching to file
+						useWorkflowStore.getState().setCurrentWorkflow(null);
+					});
 			} catch (error) {
 				console.error("Error loading file:", error);
 			}
-			// Reset currentWorkflow
-			useWorkflowStore.getState().setCurrentWorkflow(null);
 		} else {
 			set({ currentFile: null });
 		}

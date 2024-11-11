@@ -40,17 +40,17 @@ const Panel = ({ title, children, defaultExpanded = false }: PanelProps) => {
 };
 
 export const SidePanel = () => {
-  const { loadWorkflows } = useWorkflowStore();
-  useEffect(() => {
-    loadWorkflows();
-  }, [loadWorkflows]);
+	const { loadWorkflows } = useWorkflowStore();
+	useEffect(() => {
+		loadWorkflows();
+	}, [loadWorkflows]);
 	return (
 		<div className="h-full bg-gray-800 dark:bg-zinc-900 overflow-y-auto">
 			<Panel title="editor" defaultExpanded>
 				<FileTree />
 			</Panel>
-      <Panel title="workflows" defaultExpanded>
-        <WorkflowTree />
+			<Panel title="workflows" defaultExpanded>
+				<WorkflowTree />
 			</Panel>
 			<Panel title="outline">
 				<div className="px-4 py-2 text-sm text-gray-400">

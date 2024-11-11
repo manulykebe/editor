@@ -54,21 +54,20 @@ const App = () => {
 
 					<Panel id="main-panel" order={2}>
 						<PanelGroup direction="vertical" className="h-full">
-							{!currentWorkflow && (
+							{currentWorkflow ? (
+								<Panel id="floweditor-panel" order={1}>
+									<div className="h-full flex flex-col">
+										<div className="flex-1 overflow-hidden">
+											<WorkflowEditor />
+										</div>
+									</div>
+								</Panel>
+							) : (
 								<Panel id="editor-panel" order={1}>
 									<div className="h-full flex flex-col">
 										<TabBar />
 										<div className="flex-1 overflow-hidden">
 											<Editor />
-										</div>
-									</div>
-								</Panel>
-							)}
-							{currentWorkflow && (
-								<Panel id="editor-panel" order={1}>
-									<div className="h-full flex flex-col">
-										<div className="flex-1 overflow-hidden">
-											<WorkflowEditor />
 										</div>
 									</div>
 								</Panel>

@@ -26,7 +26,7 @@ export const WorkflowTree = () => {
 		const newWorkflow = {
 			id: crypto.randomUUID(),
 			name: "New Workflow",
-			description: "A new workflow",
+			description: "Discription of your new workflow",
 			nodes: [],
 			edges: [],
 		};

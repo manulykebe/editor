@@ -28,7 +28,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   setCurrentWorkflow: (workflow) => {
     set({ currentWorkflow: workflow });
     // Reset currentFile
-    useEditorStore.getState().setCurrentFile(null);
+    // useEditorStore.getState().setCurrentFile(null);
   },
 
   addWorkflow: (workflow) => 
