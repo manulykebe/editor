@@ -142,6 +142,24 @@ export const WorkflowEditor = () => {
 		setEditingNode(null);
 	};
 
+  const onKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      // Check if delete or backspace was pressed
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        setEdges((eds) => eds.filter((edge) => !edge.selected));
+      }
+    },
+    [setEdges]
+  );
+
+  // Add event listener
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [onKeyDown]);
+
 	return (
 		<div className="h-full w-full">
 			<ReactFlow
@@ -153,6 +171,7 @@ export const WorkflowEditor = () => {
 				onNodeDoubleClick={handleNodeDoubleClick}
 				nodeTypes={nodeTypes}
         edgeTypes={edgeTypes} 
+        deleteKeyCode={['Backspace', 'Delete']} // Enable built-in delete functionality
 				fitView
 			>
 				<Background />

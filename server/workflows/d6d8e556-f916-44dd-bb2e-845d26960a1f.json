@@ -28,7 +28,7 @@
       },
       "width": 200,
       "height": 100,
-      "selected": true,
+      "selected": false,
       "positionAbsolute": {
         "x": 52.07446808510639,
         "y": -61.43617021276597
@@ -69,12 +69,12 @@
   ],
   "edges": [
     {
-      "source": "8045fa2c-6191-48c5-8218-93cc2a4b4977",
+      "source": "5db32b0e-0a36-46c3-8178-f8afcaefd4c0",
       "sourceHandle": null,
       "target": "8045fa2c-6191-48c5-8218-93cc2a4b4977",
       "targetHandle": null,
-      "type": "selfLoopEdge",
-      "id": "reactflow__edge-8045fa2c-6191-48c5-8218-93cc2a4b4977-8045fa2c-6191-48c5-8218-93cc2a4b4977"
+      "type": "default",
+      "id": "reactflow__edge-5db32b0e-0a36-46c3-8178-f8afcaefd4c0-8045fa2c-6191-48c5-8218-93cc2a4b4977"
     }
   ]
 }
