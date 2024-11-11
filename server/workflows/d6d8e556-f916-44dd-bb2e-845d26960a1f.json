@@ -2,6 +2,38 @@
   "id": "d6d8e556-f916-44dd-bb2e-845d26960a1f",
   "name": "New Workflow",
   "description": "A new workflow",
-  "nodes": [],
+  "nodes": [
+    {
+      "id": "8045fa2c-6191-48c5-8218-93cc2a4b4977",
+      "type": "workflowNode",
+      "position": {
+        "x": 92.5,
+        "y": 31.5
+      },
+      "data": {
+        "name": "ssssss",
+        "description": "",
+        "script": "/demo.js",
+        "callbacks": {
+          "onStart": false,
+          "onStartRun": false,
+          "onComplete": false,
+          "onCompleteRun": false,
+          "onReject": false,
+          "onRejectRun": false,
+          "onAbort": false,
+          "onAbortRun": false
+        }
+      },
+      "width": 200,
+      "height": 76,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 92.5,
+        "y": 31.5
+      },
+      "dragging": false
+    }
+  ],
   "edges": []
 }

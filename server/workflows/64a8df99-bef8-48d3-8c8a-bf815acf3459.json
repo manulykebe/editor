@@ -1,0 +1,79 @@
+{
+  "id": "64a8df99-bef8-48d3-8c8a-bf815acf3459",
+  "name": "New Workflow",
+  "description": "Discription of your new workflow",
+  "nodes": [
+    {
+      "id": "ac3b5281-e4d1-419f-b53f-fa4964445229",
+      "type": "workflowNode",
+      "position": {
+        "x": 54.5,
+        "y": 37
+      },
+      "data": {
+        "name": "node",
+        "description": "",
+        "script": "/demo01.js",
+        "callbacks": {
+          "onStart": false,
+          "onStartRun": false,
+          "onComplete": false,
+          "onCompleteRun": false,
+          "onReject": false,
+          "onRejectRun": false,
+          "onAbort": false,
+          "onAbortRun": false
+        }
+      },
+      "width": 200,
+      "height": 76,
+      "selected": true,
+      "positionAbsolute": {
+        "x": 54.5,
+        "y": 37
+      },
+      "dragging": false
+    },
+    {
+      "id": "146095eb-4870-4a34-8350-860847c75573",
+      "type": "workflowNode",
+      "position": {
+        "x": 91,
+        "y": 156
+      },
+      "data": {
+        "name": "nodez",
+        "description": "",
+        "script": "/demo01.js",
+        "callbacks": {
+          "onStart": false,
+          "onStartRun": false,
+          "onComplete": false,
+          "onCompleteRun": false,
+          "onReject": false,
+          "onRejectRun": false,
+          "onAbort": false,
+          "onAbortRun": false
+        }
+      },
+      "width": 200,
+      "height": 76,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 91,
+        "y": 156
+      },
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "ac3b5281-e4d1-419f-b53f-fa4964445229",
+      "sourceHandle": null,
+      "target": "146095eb-4870-4a34-8350-860847c75573",
+      "targetHandle": null,
+      "type": "smoothstep",
+      "id": "reactflow__edge-ac3b5281-e4d1-419f-b53f-fa4964445229-146095eb-4870-4a34-8350-860847c75573"
+    }
+  ]
+}

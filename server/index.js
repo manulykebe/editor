@@ -87,6 +87,18 @@ app.get('/api/workflows', async (req, res) => {
   }
 });
 
+app.get('/api/workflows/:id', async (req, res) => {
+  try {
+    const content = await fs.readFile(
+      path.join(WORKFLOWS_DIR, `${req.params.id}.json`),
+      'utf-8'
+    );
+    res.json(JSON.parse(content));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/workflows', async (req, res) => {
   try {
     const workflow = req.body;

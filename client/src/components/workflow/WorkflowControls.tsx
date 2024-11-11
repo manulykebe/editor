@@ -5,6 +5,7 @@ import { Save, Plus, Play, Pause } from 'lucide-react';
 interface WorkflowControlsProps {
   onSave: () => void;
   onAddNode: () => void;
+  isSaving?: boolean;
 }
 
 export const WorkflowControls = ({ onSave, onAddNode }: WorkflowControlsProps) => {

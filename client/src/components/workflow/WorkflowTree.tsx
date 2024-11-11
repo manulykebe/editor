@@ -20,7 +20,10 @@ export const WorkflowTree = () => {
 		setCurrentWorkflow,
 		deleteWorkflow,
 		saveWorkflow,
+		loadWorkflow,
 	} = useWorkflowStore();
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleCreateWorkflow = async () => {
 		const newWorkflow = {
@@ -34,12 +37,26 @@ export const WorkflowTree = () => {
 		setCurrentWorkflow(newWorkflow);
 	};
 
+	const handleSelectWorkflow = async (workflow) => {
+		try {
+			setIsLoading(true);
+			// First load the full workflow data from server
+			await loadWorkflow(workflow.id);
+			// Don't need setCurrentWorkflow here since loadWorkflow handles it
+		} catch (error) {
+			console.error('Error loading workflow:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	return (
 		<div className="text-gray-300">
 			<button
 				onClick={handleCreateWorkflow}
 				className="p-1 hover:bg-gray-600 rounded"
 				title="New Workflow"
+				disabled={isLoading}
 			>
 				<Plus size={14} />
 			</button>
@@ -47,14 +64,14 @@ export const WorkflowTree = () => {
 				{workflows.map((workflow) => (
 					<div
 						key={workflow.id}
-						className={`group flex items-center px-4 py-1 cursor-pointer ${
-							currentWorkflow?.id === workflow.id
-								? "bg-gray-700"
-								: "hover:bg-gray-700"
-						}`}
-						onClick={() => setCurrentWorkflow(workflow)}
+						className={`group flex items-center px-4 py-1 cursor-pointer 
+							${currentWorkflow?.id === workflow.id ? "bg-gray-700" : "hover:bg-gray-700"}
+							${isLoading && currentWorkflow?.id === workflow.id ? 'opacity-50' : ''}`}
+						onClick={() => handleSelectWorkflow(workflow)}
 					>
-						<FileText size={14} className="mr-2 text-gray-400" />
+						<FileText size={14} className={`mr-2 text-gray-400 ${
+							isLoading && currentWorkflow?.id === workflow.id ? 'animate-spin' : ''
+						}`} />
 						<span className="text-sm flex-1">{workflow.name}</span>
 						<button
 							onClick={(e) => {

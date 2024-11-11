@@ -19,6 +19,7 @@ interface WorkflowStore {
   deleteWorkflow: (id: string) => void;
   loadWorkflows: () => Promise<void>;
   saveWorkflow: (workflow: Workflow) => Promise<void>;
+  loadWorkflow: (id: string) => Promise<void>;
 }
 
 export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
@@ -74,13 +75,42 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   saveWorkflow: async (workflow) => {
     try {
       await fetch('http://localhost:3000/api/workflows', {
-        method: 'POST',
+        method: 'POST', 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(workflow)
       });
-      get().addWorkflow(workflow);
+      
+      // Update or add the workflow in state
+      set((state) => {
+        const exists = state.workflows.some(w => w.id === workflow.id);
+        if (exists) {
+          return {
+            workflows: state.workflows.map(w => 
+              w.id === workflow.id ? workflow : w
+            ),
+            currentWorkflow: workflow
+          };
+        } else {
+          return {
+            workflows: [...state.workflows, workflow],
+            currentWorkflow: workflow
+          };
+        }
+      });
+
     } catch (error) {
       console.error('Error saving workflow:', error);
+    }
+  },
+
+  loadWorkflow: async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/workflows/${id}`);
+      const workflow = await response.json();
+      set({ currentWorkflow: workflow });
+    } catch (error) {
+      console.error('Error loading workflow:', error);
+      set({ currentWorkflow: null });
     }
   }
 }));
