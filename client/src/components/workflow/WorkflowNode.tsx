@@ -42,11 +42,11 @@ export const WorkflowNode = ({ data, selected }: WorkflowNodeProps) => {
   };
 
   return (
-    <div className="bg-zinc-800 rounded-lg p-4 min-w-[200px]">
+    <div className="bg-zinc-800 rounded-lg p-4 min-w-[200px] max-w-[200px] h-[100px]">
       {/* Top Markers */}
       <div className="flex justify-between mb-2">
         <div className="flex gap-1">
-          {data.callbacks.onStart && (
+          { (
             <div 
               className="text-green-400 cursor-pointer group relative" 
               title="onStartCallback"
@@ -60,7 +60,7 @@ export const WorkflowNode = ({ data, selected }: WorkflowNodeProps) => {
               </div>
             </div>
           )}
-          {data.repeat && data.callbacks.onStartRun && (
+          {data.repeat  && (
             <div className="text-blue-400 cursor-pointer" title="onStartRunCallback">
               <Play size={16} />
             </div>
@@ -72,11 +72,6 @@ export const WorkflowNode = ({ data, selected }: WorkflowNodeProps) => {
       <div className="text-white">
         <h3 className="font-medium text-lg mb-1">{data.name}</h3>
         <p className="text-sm text-zinc-400">{data.description}</p>
-        {data.repeat && (
-          <div className="text-sm text-blue-400 mt-1">
-            Repeats: {data.repeat}
-          </div>
-        )}
       </div>
 
       {/* Bottom Markers */}
@@ -85,8 +80,8 @@ export const WorkflowNode = ({ data, selected }: WorkflowNodeProps) => {
       </div>
 
       {/* Handles */}
-      <Handle type="target" position={Position.Top} className="w-3 h-3" />
-      <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
+      <Handle type="source" position={Position.Left} className="w-3 h-3" />
+      <Handle type="target" position={Position.Right} className="w-3 h-3" />
     </div>
   );
 };

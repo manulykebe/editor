@@ -7,12 +7,13 @@
       "id": "8045fa2c-6191-48c5-8218-93cc2a4b4977",
       "type": "workflowNode",
       "position": {
-        "x": 92.5,
-        "y": 31.5
+        "x": 52.07446808510639,
+        "y": -61.43617021276597
       },
       "data": {
         "name": "ssssss",
-        "description": "",
+        "description": "description content description",
+        "repeat": 4,
         "script": "/demo.js",
         "callbacks": {
           "onStart": false,
@@ -26,11 +27,42 @@
         }
       },
       "width": 200,
-      "height": 76,
+      "height": 100,
+      "selected": true,
+      "positionAbsolute": {
+        "x": 52.07446808510639,
+        "y": -61.43617021276597
+      },
+      "dragging": false
+    },
+    {
+      "id": "5db32b0e-0a36-46c3-8178-f8afcaefd4c0",
+      "type": "workflowNode",
+      "position": {
+        "x": 100,
+        "y": 248.45382439642796
+      },
+      "data": {
+        "name": "esfgegazrarz",
+        "description": "zegzeg",
+        "script": "/demo01.js",
+        "callbacks": {
+          "onStart": false,
+          "onStartRun": false,
+          "onComplete": false,
+          "onCompleteRun": false,
+          "onReject": false,
+          "onRejectRun": false,
+          "onAbort": false,
+          "onAbortRun": false
+        }
+      },
+      "width": 200,
+      "height": 100,
       "selected": false,
       "positionAbsolute": {
-        "x": 92.5,
-        "y": 31.5
+        "x": 100,
+        "y": 248.45382439642796
       },
       "dragging": false
     }
