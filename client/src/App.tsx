@@ -54,15 +54,26 @@ const App = () => {
 
 					<Panel id="main-panel" order={2}>
 						<PanelGroup direction="vertical" className="h-full">
-							<Panel id="editor-panel" order={1}>
-								<div className="h-full flex flex-col">
-									<TabBar />
-									<div className="flex-1 overflow-hidden">
-										{currentFile && <Editor />}
-										{currentWorkflow && <WorkflowEditor />}
+							{!currentWorkflow && (
+								<Panel id="editor-panel" order={1}>
+									<div className="h-full flex flex-col">
+										<TabBar />
+										<div className="flex-1 overflow-hidden">
+											<Editor />
+										</div>
 									</div>
-								</div>
-							</Panel>
+								</Panel>
+							)}
+							{currentWorkflow && (
+								<Panel id="editor-panel" order={1}>
+									<div className="h-full flex flex-col">
+										<div className="flex-1 overflow-hidden">
+											<WorkflowEditor />
+										</div>
+									</div>
+								</Panel>
+							)}
+
 							{isBottomPanelVisible && (
 								<>
 									<PanelResizeHandle className="h-1 bg-zinc-700 hover:bg-blue-500 transition-colors" />
@@ -83,6 +94,6 @@ const App = () => {
 			<Footer />
 		</div>
 	);
-}
+};
 
 export default App;

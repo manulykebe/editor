@@ -68,8 +68,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 				console.error("Error loading file:", error);
 			}
 			// Reset currentWorkflow
-			debugger;
-			// useWorkflowStore.getState().setCurrentWorkflow(null);
+			useWorkflowStore.getState().setCurrentWorkflow(null);
 		} else {
 			set({ currentFile: null });
 		}
