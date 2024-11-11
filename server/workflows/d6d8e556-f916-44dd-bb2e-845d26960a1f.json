@@ -39,13 +39,14 @@
       "id": "5db32b0e-0a36-46c3-8178-f8afcaefd4c0",
       "type": "workflowNode",
       "position": {
-        "x": 100,
-        "y": 248.45382439642796
+        "x": 14.996395805608472,
+        "y": 92.15687474867579
       },
       "data": {
         "name": "esfgegazrarz",
         "description": "zegzeg",
         "script": "/demo01.js",
+        "repeat": 5,
         "callbacks": {
           "onStart": false,
           "onStartRun": false,
@@ -59,13 +60,30 @@
       },
       "width": 200,
       "height": 100,
-      "selected": false,
+      "selected": true,
       "positionAbsolute": {
-        "x": 100,
-        "y": 248.45382439642796
+        "x": 14.996395805608472,
+        "y": 92.15687474867579
       },
       "dragging": false
     }
   ],
-  "edges": []
+  "edges": [
+    {
+      "source": "8045fa2c-6191-48c5-8218-93cc2a4b4977",
+      "sourceHandle": null,
+      "target": "8045fa2c-6191-48c5-8218-93cc2a4b4977",
+      "targetHandle": null,
+      "type": "selfLoopEdge",
+      "id": "reactflow__edge-8045fa2c-6191-48c5-8218-93cc2a4b4977-8045fa2c-6191-48c5-8218-93cc2a4b4977"
+    },
+    {
+      "source": "5db32b0e-0a36-46c3-8178-f8afcaefd4c0",
+      "sourceHandle": null,
+      "target": "5db32b0e-0a36-46c3-8178-f8afcaefd4c0",
+      "targetHandle": null,
+      "type": "selfLoopEdge",
+      "id": "reactflow__edge-5db32b0e-0a36-46c3-8178-f8afcaefd4c0-5db32b0e-0a36-46c3-8178-f8afcaefd4c0"
+    }
+  ]
 }
