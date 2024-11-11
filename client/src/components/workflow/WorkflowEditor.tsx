@@ -14,9 +14,14 @@ import { WorkflowNode } from "./WorkflowNode";
 import { WorkflowControls } from "./WorkflowControls";
 import { NodeDialog } from "./NodeDialog";
 import { useWorkflowStore } from "../../store/workflowStore";
+import { SelfLoopEdge } from './SelfLoopEdge';
+
 
 const nodeTypes = {
 	workflowNode: WorkflowNode,
+};
+const edgeTypes = {
+  selfLoopEdge: SelfLoopEdge,
 };
 
 export const WorkflowEditor = () => {
@@ -62,37 +67,24 @@ export const WorkflowEditor = () => {
 			});
 	}, []);
 
-	const onConnect = useCallback(
-		(params: Connection) => {
-			if (params.source === params.target) {
-				const label = window.prompt(
-					"Enter repeat count (-1 or >0):",
-					"1"
-				);
-				if (label) {
-					const count = parseInt(label);
-					if (count === -1 || count > 0) {
-						setEdges((eds) =>
-							addEdge(
-								{
-									...params,
-									label: `repeats: ${count}`,
-									type: "smoothstep",
-									animated: true,
-								},
-								eds
-							)
-						);
-					}
-				}
-			} else {
-				setEdges((eds) =>
-					addEdge({ ...params, type: "smoothstep" }, eds)
-				);
-			}
-		},
-		[setEdges]
-	);
+  const onConnect = useCallback(
+    (params: Connection) => {
+      let edgeType = 'default';
+      if (params.source === params.target) {
+        edgeType = 'selfLoopEdge';
+      }
+      setEdges((eds) =>
+        addEdge(
+          {
+            ...params,
+            type: edgeType,
+          },
+          eds
+        )
+      );
+    },
+    [setEdges]
+  );
 
 	const onSave = useCallback(async () => {
 		if (currentWorkflow) {
@@ -160,6 +152,7 @@ export const WorkflowEditor = () => {
 				onConnect={onConnect}
 				onNodeDoubleClick={handleNodeDoubleClick}
 				nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes} 
 				fitView
 			>
 				<Background />

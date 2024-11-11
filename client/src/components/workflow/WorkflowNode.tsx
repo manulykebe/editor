@@ -19,34 +19,50 @@ interface WorkflowNodeProps {
       onAbortRun: boolean;
     };
   };
+  selected?: boolean;  
 }
 
-export const WorkflowNode = ({ data }: WorkflowNodeProps) => {
+interface CallbackMarker {
+  type: string;
+  position: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'bottomCenter';
+  icon: React.ReactNode;
+  color: string;
+}
+
+export const WorkflowNode = ({ data, selected }: WorkflowNodeProps) => {
+  const handleCallbackAction = (action: 'create' | 'edit' | 'delete', type: string) => {
+    if (action === 'create') {
+      // Show dropdown or create file
+      const filename = `${data.id}/${type}.js`;
+    } else if (action === 'edit') {
+      // Open in editor
+    } else if (action === 'delete') {
+      // Remove callback
+    }
+  };
+
   return (
-    <div className="bg-zinc-800 rounded-lg shadow-lg p-4 min-w-[200px]">
+    <div className="bg-zinc-800 rounded-lg p-4 min-w-[200px]">
       {/* Top Markers */}
       <div className="flex justify-between mb-2">
         <div className="flex gap-1">
           {data.callbacks.onStart && (
-            <div className="text-green-400 cursor-pointer" title="onStartCallback">
+            <div 
+              className="text-green-400 cursor-pointer group relative" 
+              title="onStartCallback"
+            >
               <Play size={16} />
+              <div className="hidden group-hover:block absolute -top-8 bg-zinc-700 p-1 rounded">
+                <div className="flex gap-1">
+                  <button onClick={() => handleCallbackAction('edit', 'onStart')}>Edit</button>
+                  <button onClick={() => handleCallbackAction('delete', 'onStart')}>Delete</button>
+                </div>
+              </div>
             </div>
           )}
-          {data.callbacks.onStartRun && (
+          {data.repeat && data.callbacks.onStartRun && (
             <div className="text-blue-400 cursor-pointer" title="onStartRunCallback">
               <Play size={16} />
-            </div>
-          )}
-        </div>
-        <div className="flex gap-1">
-          {data.callbacks.onComplete && (
-            <div className="text-green-400 cursor-pointer" title="onCompleteCallback">
-              <Settings size={16} />
-            </div>
-          )}
-          {data.callbacks.onCompleteRun && (
-            <div className="text-blue-400 cursor-pointer" title="onCompleteRunCallback">
-              <Settings size={16} />
             </div>
           )}
         </div>
@@ -56,7 +72,7 @@ export const WorkflowNode = ({ data }: WorkflowNodeProps) => {
       <div className="text-white">
         <h3 className="font-medium text-lg mb-1">{data.name}</h3>
         <p className="text-sm text-zinc-400">{data.description}</p>
-        {data.repeat > 0 && (
+        {data.repeat && (
           <div className="text-sm text-blue-400 mt-1">
             Repeats: {data.repeat}
           </div>
@@ -65,30 +81,7 @@ export const WorkflowNode = ({ data }: WorkflowNodeProps) => {
 
       {/* Bottom Markers */}
       <div className="flex justify-between mt-2">
-        <div className="flex gap-1">
-          {data.callbacks.onAbort && (
-            <div className="text-red-400 cursor-pointer" title="onAbortCallback">
-              <XCircle size={16} />
-            </div>
-          )}
-          {data.callbacks.onAbortRun && (
-            <div className="text-orange-400 cursor-pointer" title="onAbortRunCallback">
-              <XCircle size={16} />
-            </div>
-          )}
-        </div>
-        <div className="flex gap-1">
-          {data.callbacks.onReject && (
-            <div className="text-red-400 cursor-pointer" title="onRejectCallback">
-              <AlertCircle size={16} />
-            </div>
-          )}
-          {data.callbacks.onRejectRun && (
-            <div className="text-orange-400 cursor-pointer" title="onRejectRunCallback">
-              <AlertCircle size={16} />
-            </div>
-          )}
-        </div>
+        {/* Add onAbort, onReject etc markers */}
       </div>
 
       {/* Handles */}
