@@ -14,19 +14,20 @@ import { WorkflowNode } from "./WorkflowNode";
 import { WorkflowControls } from "./WorkflowControls";
 import { NodeDialog } from "./NodeDialog";
 import { useWorkflowStore } from "../../store/workflowStore";
-import { SelfLoopEdge } from './SelfLoopEdge';
-
+import { SelfLoopEdge } from "./SelfLoopEdge";
+import { useEditorStore } from '../../store/editorStore';
 
 const nodeTypes = {
 	workflowNode: WorkflowNode,
 };
 const edgeTypes = {
-  selfLoopEdge: SelfLoopEdge,
+	selfLoopEdge: SelfLoopEdge,
 };
 
 export const WorkflowEditor = () => {
 	const { currentWorkflow, updateWorkflow, saveWorkflow } =
 		useWorkflowStore();
+	const { isDarkMode } = useEditorStore();
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -67,24 +68,24 @@ export const WorkflowEditor = () => {
 			});
 	}, []);
 
-  const onConnect = useCallback(
-    (params: Connection) => {
-      let edgeType = 'default';
-      if (params.source === params.target) {
-        edgeType = 'selfLoopEdge';
-      }
-      setEdges((eds) =>
-        addEdge(
-          {
-            ...params,
-            type: edgeType,
-          },
-          eds
-        )
-      );
-    },
-    [setEdges]
-  );
+	const onConnect = useCallback(
+		(params: Connection) => {
+			let edgeType = "default";
+			if (params.source === params.target) {
+				edgeType = "selfLoopEdge";
+			}
+			setEdges((eds) =>
+				addEdge(
+					{
+						...params,
+						type: edgeType,
+					},
+					eds
+				)
+			);
+		},
+		[setEdges]
+	);
 
 	const onSave = useCallback(async () => {
 		if (currentWorkflow) {
@@ -142,23 +143,23 @@ export const WorkflowEditor = () => {
 		setEditingNode(null);
 	};
 
-  const onKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      // Check if delete or backspace was pressed
-      if (event.key === 'Delete' || event.key === 'Backspace') {
-        setEdges((eds) => eds.filter((edge) => !edge.selected));
-      }
-    },
-    [setEdges]
-  );
+	const onKeyDown = useCallback(
+		(event: KeyboardEvent) => {
+			// Check if delete or backspace was pressed
+			if (event.key === "Delete" || event.key === "Backspace") {
+				setEdges((eds) => eds.filter((edge) => !edge.selected));
+			}
+		},
+		[setEdges]
+	);
 
-  // Add event listener
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  }, [onKeyDown]);
+	// Add event listener
+	useEffect(() => {
+		document.addEventListener("keydown", onKeyDown);
+		return () => {
+			document.removeEventListener("keydown", onKeyDown);
+		};
+	}, [onKeyDown]);
 
 	return (
 		<div className="h-full w-full">
@@ -170,8 +171,8 @@ export const WorkflowEditor = () => {
 				onConnect={onConnect}
 				onNodeDoubleClick={handleNodeDoubleClick}
 				nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes} 
-        deleteKeyCode={['Backspace', 'Delete']} // Enable built-in delete functionality
+				edgeTypes={edgeTypes}
+				deleteKeyCode={["Backspace", "Delete"]} // Enable built-in delete functionality
 				fitView
 			>
 				<Background />

@@ -1,3 +1,4 @@
+// workflowStore.ts
 import { create } from 'zustand';
 import { Node, Edge } from 'reactflow';
 import { useEditorStore } from './editorStore';

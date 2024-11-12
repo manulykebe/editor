@@ -128,8 +128,18 @@ app.get('/api/files', async (req, res) => {
     if (!filePath) throw new Error('Path is required');
     
     const fullPath = path.join(WORKSPACE_DIR, filePath);
-    const content = await fs.readFile(fullPath, 'utf-8');
-    res.json({ content });
+    
+    try {
+      const content = await fs.readFile(fullPath, 'utf-8');
+      res.json({ content });
+    } catch (error) {
+      // Return empty content if file doesn't exist
+      if (error.code === 'ENOENT') {
+        res.json({ content: '' });
+      } else {
+        throw error;
+      }
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -160,6 +170,11 @@ app.put('/api/files', async (req, res) => {
     if (!filePath || content === undefined) throw new Error('Path and content are required');
 
     const fullPath = path.join(WORKSPACE_DIR, filePath);
+    
+    // Create directory structure if it doesn't exist
+    await fs.mkdir(path.dirname(fullPath), { recursive: true });
+    
+    // Write the file
     await fs.writeFile(fullPath, content, 'utf-8');
     res.json({ message: 'File updated successfully' });
   } catch (error) {
