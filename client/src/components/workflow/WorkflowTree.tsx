@@ -27,7 +27,7 @@ export const WorkflowTree = () => {
 
 	const handleCreateWorkflow = async () => {
 		const newWorkflow = {
-			id: crypto.randomUUID(),
+			id: nanoid(10),
 			name: "New Workflow",
 			description: "Discription of your new workflow",
 			nodes: [],
@@ -44,7 +44,7 @@ export const WorkflowTree = () => {
 			await loadWorkflow(workflow.id);
 			// Don't need setCurrentWorkflow here since loadWorkflow handles it
 		} catch (error) {
-			console.error('Error loading workflow:', error);
+			console.error("Error loading workflow:", error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -66,12 +66,17 @@ export const WorkflowTree = () => {
 						key={workflow.id}
 						className={`group flex items-center px-4 py-1 cursor-pointer 
 							${currentWorkflow?.id === workflow.id ? "bg-gray-700" : "hover:bg-gray-700"}
-							${isLoading && currentWorkflow?.id === workflow.id ? 'opacity-50' : ''}`}
+							${isLoading && currentWorkflow?.id === workflow.id ? "opacity-50" : ""}`}
 						onClick={() => handleSelectWorkflow(workflow)}
 					>
-						<FileText size={14} className={`mr-2 text-gray-400 ${
-							isLoading && currentWorkflow?.id === workflow.id ? 'animate-spin' : ''
-						}`} />
+						<FileText
+							size={14}
+							className={`mr-2 text-gray-400 ${
+								isLoading && currentWorkflow?.id === workflow.id
+									? "animate-spin"
+									: ""
+							}`}
+						/>
 						<span className="text-sm flex-1">{workflow.name}</span>
 						<button
 							onClick={(e) => {

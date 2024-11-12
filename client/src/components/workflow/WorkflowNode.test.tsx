@@ -3,11 +3,12 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { WorkflowNode } from './WorkflowNode';
 import '@testing-library/jest-dom';
-
 // Mock the zustand store
 jest.mock('../../store/workflowStore', () => ({
   useWorkflowStore: jest.fn()
 }));
+
+import { useWorkflowStore } from '../../store/workflowStore';
 
 // Provide a mock implementation for useWorkflowStore
 const mockStore = {
@@ -23,7 +24,7 @@ const mockStore = {
 };
 
 // Set the mock return value
-(useWorkflowStore as jest.Mock).mockReturnValue(mockStore);
+(useWorkflowStore as unknown as jest.Mock).mockReturnValue(mockStore);
 
 describe('WorkflowNode', () => {
 	// Basic test props

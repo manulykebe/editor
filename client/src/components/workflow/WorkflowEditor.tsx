@@ -15,7 +15,8 @@ import { WorkflowControls } from "./WorkflowControls";
 import { NodeDialog } from "./NodeDialog";
 import { useWorkflowStore } from "../../store/workflowStore";
 import { SelfLoopEdge } from "./SelfLoopEdge";
-import { useEditorStore } from '../../store/editorStore';
+import { useEditorStore } from "../../store/editorStore";
+import { nanoid } from 'nanoid';
 
 const nodeTypes = {
 	workflowNode: WorkflowNode,
@@ -132,7 +133,7 @@ export const WorkflowEditor = () => {
 			);
 		} else {
 			const newNode: Node = {
-				id: crypto.randomUUID(),
+				id: nanoid(10),
 				type: "workflowNode",
 				position: { x: 100, y: 100 },
 				data: nodeData,
