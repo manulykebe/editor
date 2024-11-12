@@ -15,7 +15,7 @@
         "description": "",
         "script": "/demo01.js",
         "callbacks": {
-          "onStart": false,
+          "onStart": true,
           "onStartRun": false,
           "onComplete": false,
           "onCompleteRun": false,
@@ -26,7 +26,7 @@
         }
       },
       "width": 200,
-      "height": 76,
+      "height": 100,
       "selected": true,
       "positionAbsolute": {
         "x": 54.5,
@@ -57,7 +57,7 @@
         }
       },
       "width": 200,
-      "height": 76,
+      "height": 100,
       "selected": false,
       "positionAbsolute": {
         "x": 91,
