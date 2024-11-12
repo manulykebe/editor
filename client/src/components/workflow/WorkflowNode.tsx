@@ -8,42 +8,39 @@ import type { CallbackMarker as CallbackMarkerType } from "./CallbackMarker";
 
 // Define the CallbackKey type
 type CallbackKey =
-  | 'onStart'
-  | 'onStartRun'
-  | 'onComplete'
-  | 'onCompleteRun'
-  | 'onReject'
-  | 'onRejectRun'
-  | 'onAbort'
-  | 'onAbortRun';
+	| "onStart"
+	| "onStartRun"
+	| "onComplete"
+	| "onCompleteRun"
+	| "onReject"
+	| "onRejectRun"
+	| "onAbort"
+	| "onAbortRun";
 
 // Update the interface
 interface WorkflowNodeProps {
-  id: string;
-  data: {
-    name: string;
-    description: string;
-    repeat?: number;
-    callbacks: Record<CallbackKey, boolean>;
-  };
-  selected?: boolean;
+	id: string;
+	data: {
+		name: string;
+		description: string;
+		repeat?: number;
+		callbacks: Record<CallbackKey, boolean>;
+	};
+	selected?: boolean;
 }
 
 export const WorkflowNode = ({ id, data, selected }: WorkflowNodeProps) => {
-	const { currentWorkflow } = useWorkflowStore();
-
-	// Return early if no workflow is selected
-	if (!currentWorkflow) {
-		console.warn("No workflow selected");
-		return null;
-	}
-
+	const { currentWorkflow, updateWorkflow } = useWorkflowStore();
 	const [editorOpen, setEditorOpen] = useState(false);
 	const [currentCallback, setCurrentCallback] = useState<{
 		type: string;
 		code: string;
 	} | null>(null);
 
+	if (!currentWorkflow) {
+		console.warn("No workflow selected");
+		return null;
+	}
 	const markers: CallbackMarkerType[] = [
 		// Top Left
 		{
@@ -138,26 +135,43 @@ export const WorkflowNode = ({ id, data, selected }: WorkflowNodeProps) => {
 						`http://localhost:3000/api/files?path=${encodeURIComponent(
 							filename
 						)}`,
-						{
-							method: "DELETE",
-						}
+						{ method: "DELETE" }
 					);
 					// Update node data to reflect the removed callback
-					const callbackKey = type.replace("Callback", "") as CallbackKey;
-					data.callbacks[callbackKey] = false;
+					const callbackKey = type.replace(
+						"Callback",
+						""
+					) as CallbackKey;
+					const updatedCallbacks = {
+						...data.callbacks,
+						[callbackKey]: false,
+					};
+					updateWorkflow({
+						...currentWorkflow,
+						nodes: currentWorkflow.nodes.map((n) =>
+							n.id === id
+								? {
+										...n,
+										data: {
+											...n.data,
+											callbacks: updatedCallbacks,
+										},
+								  }
+								: n
+						),
+					});
 				} catch (error) {
 					console.error("Error deleting callback file:", error);
 				}
 			}
 		},
-		[id, currentWorkflow]
+		[id, currentWorkflow, data.callbacks, updateWorkflow]
 	);
 
 	const handleSaveCallback = useCallback(
 		async (code: string) => {
 			if (!currentCallback || !id) return;
 			const filename = `${currentWorkflow.id}/${id}/${currentCallback.type}.json`;
-			debugger;
 			try {
 				const response = await fetch(
 					"http://localhost:3000/api/files",
@@ -175,8 +189,28 @@ export const WorkflowNode = ({ id, data, selected }: WorkflowNodeProps) => {
 					throw new Error(`Server returned ${response.status}`);
 				}
 
-				const callbackKey = currentCallback.type.replace("Callback", "") as CallbackKey;
-				data.callbacks[callbackKey] = true;
+				const callbackKey = currentCallback.type.replace(
+					"Callback",
+					""
+				) as CallbackKey;
+				const updatedCallbacks = {
+					...data.callbacks,
+					[callbackKey]: true,
+				};
+				updateWorkflow({
+					...currentWorkflow,
+					nodes: currentWorkflow.nodes.map((n) =>
+						n.id === id
+							? {
+									...n,
+									data: {
+										...n.data,
+										callbacks: updatedCallbacks,
+									},
+							  }
+							: n
+					),
+				});
 				setEditorOpen(false);
 				setCurrentCallback(null);
 			} catch (error) {
@@ -184,7 +218,7 @@ export const WorkflowNode = ({ id, data, selected }: WorkflowNodeProps) => {
 				// You might want to show an error message to the user here
 			}
 		},
-		[currentCallback, id, currentWorkflow]
+		[currentCallback, id, currentWorkflow, data.callbacks, updateWorkflow]
 	);
 
 	return (
@@ -203,14 +237,17 @@ export const WorkflowNode = ({ id, data, selected }: WorkflowNodeProps) => {
 				/>
 				{/* Markers */}
 				{markers.map((marker) => {
-					const callbackKey = marker.name.replace("Callback", "") as CallbackKey;
+					const callbackKey = marker.name.replace(
+						"Callback",
+						""
+					) as CallbackKey;
 					const isEnabled = data.callbacks[callbackKey];
 					return (
 						<CallbackMarker
 							key={marker.name}
 							marker={marker}
 							isEnabled={isEnabled}
-							workflowId={currentWorkflow.id} // No need for optional chaining here
+							workflowId={currentWorkflow.id}
 							nodeId={id}
 							onAction={handleCallbackAction}
 						/>
@@ -218,7 +255,7 @@ export const WorkflowNode = ({ id, data, selected }: WorkflowNodeProps) => {
 				})}
 				<div className="flex">
 					<div className="rounded-full w-12 h-12 flex justify-center items-center bg-gray-100 dark:bg-gray-700">
-						x{data.repeat}
+						x{data.repeat || 1}
 					</div>
 					<div className="ml-2">
 						<div className="text-gray-800 text-lg font-bold">
@@ -226,7 +263,7 @@ export const WorkflowNode = ({ id, data, selected }: WorkflowNodeProps) => {
 						</div>
 						<div className="text-gray-500">{data.description}</div>
 					</div>
-				</div>{" "}
+				</div>
 			</div>
 
 			{/* Callback Editor Dialog */}

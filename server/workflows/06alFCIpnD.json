@@ -7,26 +7,33 @@
       "id": "m0oNRseJOx",
       "type": "workflowNode",
       "position": {
-        "x": 100,
-        "y": 100
+        "x": 75.92440318302391,
+        "y": 99.16976127320956
       },
       "data": {
         "name": "init",
         "description": "1",
         "script": "/demo\\test.js",
+        "repeat": 4,
         "callbacks": {
-          "onStart": false,
+          "onStart": true,
           "onStartRun": false,
-          "onComplete": false,
+          "onComplete": true,
           "onCompleteRun": false,
-          "onReject": false,
+          "onReject": true,
           "onRejectRun": false,
-          "onAbort": false,
+          "onAbort": true,
           "onAbortRun": false
         }
       },
       "width": 200,
-      "height": 100
+      "height": 100,
+      "selected": true,
+      "positionAbsolute": {
+        "x": 75.92440318302391,
+        "y": 99.16976127320956
+      },
+      "dragging": false
     }
   ],
   "edges": []

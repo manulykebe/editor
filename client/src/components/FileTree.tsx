@@ -12,13 +12,8 @@ import {
 	Edit2,
 } from "lucide-react";
 import { useEditorStore } from "../store/editorStore";
-
-interface FileTreeItem {
-	name: string;
-	type: "file" | "folder";
-	path: string;
-	children?: FileTreeItem[];
-}
+import { useFileSystemStore } from "../store/fileSystemStore";
+import type { FileTreeItem } from "../types/FileSystem";
 
 const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 	item,
@@ -174,10 +169,7 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 								</span>
 							) : (
 								<span className="flex items-center w-4 mr-1">
-									<FileText
-										size={16}
-										className="text-gray-400"
-									/>
+                  <FileText size={16} className="text-gray-400" />
 								</span>
 							)}
 							{item.name}
@@ -211,10 +203,7 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 						className=" text-white px-2 py-1 text-sm rounded"
 						autoFocus
 					/>
-					<button
-						type="submit"
-						className="ml-2 p-1 hover:bg-gray-600 rounded"
-					>
+          <button type="submit" className="ml-2 p-1 hover:bg-gray-600 rounded">
 						<Plus size={14} />
 					</button>
 				</form>
@@ -236,23 +225,23 @@ const FileTreeItem: React.FC<{ item: FileTreeItem; onRefresh: () => void }> = ({
 };
 
 export const FileTree = () => {
-	const [files, setFiles] = useState<FileTreeItem[]>([]);
+  const { files, isLoading, fetchFiles, startFileWatcher, stopFileWatcher } = useFileSystemStore();
 
-	const fetchFiles = async () => {
-		try {
-			const response = await fetch(
-				"http://localhost:3000/api/files/tree"
-			);
-			const data = await response.json();
-			setFiles(data);
-		} catch (error) {
-			console.error("Error fetching files:", error);
-		}
-	};
 
 	useEffect(() => {
 		fetchFiles();
+    startFileWatcher();
+    return () => {
+      stopFileWatcher();
+    };
 	}, []);
+  if (isLoading && files.length === 0) {
+    return (
+      <div className="p-4 text-gray-400">
+        Loading files...
+      </div>
+    );
+  }
 
 	return (
 		<div className="text-gray-300">
