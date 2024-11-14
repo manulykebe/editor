@@ -30,6 +30,10 @@ interface EditorStore {
 	executeFile: (path: string) => Promise<void>;
 	isExecuting: boolean;
 	executionResult: ExecutionResult | null;
+	editorType: 'monaco' | 'ace';
+	setEditorType: (type: 'monaco' | 'ace') => void;
+	lintErrors: Record<string, any[]>;
+	setLintErrors: (path: string, errors: any[]) => void;
 }
 
 export const useEditorStore = create<EditorStore>((set, get) => ({
@@ -40,6 +44,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 	fileContents: {},
 	isExecuting: false,
 	executionResult: null,
+	editorType: 'monaco',
+	lintErrors: {},
 	toggleBottomPanel: () =>
 		set((state) => ({
 			isBottomPanelVisible: !state.isBottomPanelVisible,
@@ -135,4 +141,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 			});
 		}
 	},
+	setEditorType: (type) => set({ editorType: type }),
+	setLintErrors: (path, errors) => set((state) => ({
+		lintErrors: { ...state.lintErrors, [path]: errors }
+	}))
 }));

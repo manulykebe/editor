@@ -1,5 +1,6 @@
-const { Logger, Group, sleep } = await require.async('https://manulykebe.github.io/async-monitor.js/dist/async-monitor.min.esm.js')
-console.log('test')
+
+const { Logger, Group, sleep } = await require.async('https://manulykebe.github.io/async-monitor.js/dist/async-monitor.min.esm.js');
+console.log('test');
 const demo01 = new Group({repeat: 3});
 
 	const logger = demo01.logger;
