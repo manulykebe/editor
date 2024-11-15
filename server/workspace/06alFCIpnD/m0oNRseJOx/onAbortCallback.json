@@ -1,2 +1,0 @@
-// onAbortCallback
-console.log('onAbortCallback executed');

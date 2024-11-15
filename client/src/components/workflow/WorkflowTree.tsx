@@ -12,6 +12,7 @@ import ReactFlow, {
 	useEdgesState,
 } from "reactflow";
 import "reactflow/dist/style.css";
+import { nanoid } from "nanoid";
 
 export const WorkflowTree = () => {
 	const {
@@ -26,9 +27,10 @@ export const WorkflowTree = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleCreateWorkflow = async () => {
+		const id = nanoid(10);
 		const newWorkflow = {
-			id: nanoid(10),
-			name: "New Workflow",
+			id,
+			name: `New Workflow (${id})`,
 			description: "Discription of your new workflow",
 			nodes: [],
 			edges: [],
