@@ -2,6 +2,32 @@
   "id": "-p8BPLsNbl",
   "name": "New Workflow (-p8BPLsNbl)",
   "description": "Discription of your new workflow",
-  "nodes": [],
+  "nodes": [
+    {
+      "id": "0LaooVCmmC",
+      "type": "workflowNode",
+      "position": {
+        "x": 100,
+        "y": 100
+      },
+      "data": {
+        "name": "eae",
+        "description": "azea",
+        "script": "/demo.js",
+        "callbacks": {
+          "onStart": false,
+          "onStartRun": false,
+          "onComplete": false,
+          "onCompleteRun": false,
+          "onReject": false,
+          "onRejectRun": false,
+          "onAbort": false,
+          "onAbortRun": false
+        }
+      },
+      "width": 200,
+      "height": 100
+    }
+  ],
   "edges": []
 }
